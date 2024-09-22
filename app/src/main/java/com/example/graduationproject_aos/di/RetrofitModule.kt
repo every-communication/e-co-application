@@ -1,5 +1,6 @@
 package com.example.graduationproject_aos.di
 
+import com.example.graduationproject_aos.BuildConfig.BASE_URL
 import com.example.graduationproject_aos.data.interceptor.AuthInterceptor
 import com.example.graduationproject_aos.di.qualifier.Auth
 import com.example.graduationproject_aos.di.qualifier.Logger
@@ -62,7 +63,7 @@ object RetrofitModule {
         client: OkHttpClient,
         factory: Converter.Factory
     ): Retrofit = Retrofit.Builder()
-//        .baseUrl(BASE_URL)
+        .baseUrl(BASE_URL)
         .client(client)
         .addConverterFactory(factory)
         .build()

@@ -17,11 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.graduationproject_aos.R
 import com.example.graduationproject_aos.ui.theme.GraduationProject_AOSTheme
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
     GraduationProject_AOSTheme {
         Box(
             modifier = Modifier.fillMaxSize(),

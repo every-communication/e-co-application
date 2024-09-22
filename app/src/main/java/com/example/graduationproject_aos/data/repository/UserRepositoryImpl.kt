@@ -1,6 +1,8 @@
 package com.example.graduationproject_aos.data.repository
 
 import com.example.graduationproject_aos.data.model.request.RequestUserSignInDto
+import com.example.graduationproject_aos.data.model.request.RequestUserSignUpDto
+import com.example.graduationproject_aos.data.model.response.ResponseDto
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
 import com.example.graduationproject_aos.data.source.UserDataSource
 import com.example.graduationproject_aos.domain.repository.UserRepository
@@ -12,6 +14,11 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun postLoginUser(requestUserSignInDto: RequestUserSignInDto): Result<ResponseUserSignInDto> =
         runCatching {
             userDataSource.postLoginUser(requestUserSignInDto)
+        }
+
+    override suspend fun postSignUpUser(requestUserSignUpDto: RequestUserSignUpDto): Result<ResponseDto> =
+        runCatching {
+            userDataSource.postSignUpUser(requestUserSignUpDto)
         }
 
 }

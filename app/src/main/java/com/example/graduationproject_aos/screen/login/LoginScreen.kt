@@ -96,7 +96,6 @@ fun LoginScreen(
             value = textId,
             onValueChange = { textId = it },
             placeholder = "이메일을 입력하세요.",
-            context = context,
             trailingIcon = {
                 IconButton(onClick = { textId = "" }) {
                     Icon(
@@ -113,7 +112,6 @@ fun LoginScreen(
             onValueChange = { textPw = it },
             placeholder = "비밀번호를 입력하세요.",
             isPassword = true,
-            context = context,
             trailingIcon = {
                 IconButton(onClick = { textPw = "" }) {
                     Icon(

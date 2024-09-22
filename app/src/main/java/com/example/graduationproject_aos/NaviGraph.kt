@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.graduationproject_aos.screen.HomeScreen
-import com.example.graduationproject_aos.screen.call.CallScreen
 import com.example.graduationproject_aos.screen.login.LoginScreen
 import com.example.graduationproject_aos.screen.login.LoginViewModel
 import com.example.graduationproject_aos.screen.signUp.SignUpScreen

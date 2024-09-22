@@ -3,21 +3,15 @@ package com.example.graduationproject_aos.screen.signUp
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,12 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -47,8 +35,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.graduationproject_aos.R
 import com.example.graduationproject_aos.Routes
-import com.example.graduationproject_aos.screen.login.LoginViewModel
-import com.example.graduationproject_aos.ui.theme.GraduationProject_AOSTheme
 import com.example.graduationproject_aos.util.CustomButton
 import com.example.graduationproject_aos.util.CustomOutlinedTextField
 import com.example.graduationproject_aos.util.UiState
@@ -135,7 +121,6 @@ fun SignUpScreen(
             value = textEmail,
             onValueChange = { textEmail = it },
             placeholder = "이메일을 입력하세요.",
-            context = context,
             trailingIcon = {
                 IconButton(onClick = { textEmail = "" }) {
                     Icon(
@@ -159,7 +144,6 @@ fun SignUpScreen(
             value = textNickname,
             onValueChange = { textNickname = it },
             placeholder = "닉네임을 입력하세요.",
-            context = context,
             trailingIcon = {
                 IconButton(onClick = { textNickname = "" }) {
                     Icon(
@@ -184,7 +168,6 @@ fun SignUpScreen(
             onValueChange = { textPw = it },
             placeholder = "비밀번호를 입력하세요.",
             isPassword = true,
-            context = context,
             trailingIcon = {
                 IconButton(onClick = { textPw = "" }) {
                     Icon(
@@ -209,7 +192,6 @@ fun SignUpScreen(
             onValueChange = { textPwCheck = it },
             placeholder = "비밀번호와 동일하게 입력하세요.",
             isPassword = true,
-            context = context,
             trailingIcon = {
                 IconButton(onClick = { textPwCheck = "" }) {
                     Icon(

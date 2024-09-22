@@ -3,11 +3,7 @@ package com.example.graduationproject_aos.util
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.core.content.ContextCompat
 import com.example.graduationproject_aos.R
 import androidx.compose.foundation.background
@@ -35,7 +31,6 @@ fun CustomOutlinedTextField(
     placeholder: String,
     isPassword: Boolean = false,
     modifier: Modifier = Modifier,
-    context: Context,
     trailingIcon: (@Composable (() -> Unit))? = null,
 ) {
     OutlinedTextField(

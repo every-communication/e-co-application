@@ -23,26 +23,7 @@ import com.example.graduationproject_aos.ui.theme.GraduationProject_AOSTheme
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    GraduationProject_AOSTheme {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.padding(160.dp))
-
-                Spacer(modifier = Modifier.padding(20.dp))
-                Button(
-                    onClick = {
-                    },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF1F855A))
-                ) {
-                    Text(text = "Game Start!")
-                }
-            }
-        }
-    }
+    Text(
+        text = "HomeScreen",
+    )
 }

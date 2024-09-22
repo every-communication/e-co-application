@@ -11,5 +11,5 @@ data class ResponseDto(
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: JsonObject? = null
+    val data: String
 )

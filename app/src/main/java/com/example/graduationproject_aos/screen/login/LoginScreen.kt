@@ -2,18 +2,15 @@ package com.example.graduationproject_aos.screen.login
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,22 +20,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.graduationproject_aos.R
-import com.example.graduationproject_aos.ui.theme.GraduationProject_AOSTheme
+import com.example.graduationproject_aos.Routes
 import com.example.graduationproject_aos.util.CustomButton
+import com.example.graduationproject_aos.util.CustomOutlinedTextField
 import com.example.graduationproject_aos.util.UiState
 import com.example.graduationproject_aos.util.showToast
 
@@ -65,17 +61,14 @@ fun LoginScreen(
         is UiState.Failure -> {
             context.showToast(message = state.msg)
         }
-
         is UiState.Loading -> Unit
         is UiState.Success -> {
-//            bottomBarVisible(true)
-//            navController.navigate(Routes.Map.route) {
-//                popUpTo(Routes.Home.route) {
-//                    inclusive = true
-//                }
-//            }
-            context.showToast(message = "로그인 성공!")
-
+            navController.navigate(Routes.Home.route) {
+                popUpTo(Routes.Login.route) {
+                    inclusive = true
+                }
+            }
+            loginViewModel.resetLoginState()
         }
     }
 
@@ -83,77 +76,77 @@ fun LoginScreen(
         loginViewModel.postLoginUser(textId, textPw)
     }
 
-    GraduationProject_AOSTheme {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(painter = painterResource(id = R.drawable.ecologo), contentDescription = null)
-            Spacer(modifier = Modifier.height(27.dp))
-            Text(
-                text = "로그인",
-                style = TextStyle(fontSize = 14.sp),
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(start = 24.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            TextField(
-                value = textId,
-                onValueChange = { textId = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .background(Color.White),
-                label = { Text("이메일을 입력하세요.") },
-                placeholder = { Text("") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                    }
-                )
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            TextField(
-                value = textPw,
-                onValueChange = { textPw = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .background(Color.White),
-                label = { Text("비밀번호를 입력하세요.") },
-                placeholder = { Text("") },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            CustomButton(
-                text = "로그인",
-                backgroundColor = Color.Blue,
-                textColor = Color.White,
-                padding = 24,
-                onClick = { login(textId, textPw) }
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            CustomButton(
-                text = "카카오계정으로 로그인",
-                backgroundColor = Color.Yellow,
-                textColor = Color.Black,
-                padding = 24,
-                onClick = { /* 카카오 로그인 버튼 클릭 시 동작 */ }
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "회원가입")
-        }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(painter = painterResource(id = R.drawable.ecologo), contentDescription = null)
+        Spacer(modifier = Modifier.height(27.dp))
+        Text(
+            text = "로그인",
+            color = Color.Black,
+            fontSize = 14.sp,
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(start = 24.dp)
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        CustomOutlinedTextField(
+            value = textId,
+            onValueChange = { textId = it },
+            placeholder = "이메일을 입력하세요.",
+            context = context,
+            trailingIcon = {
+                IconButton(onClick = { textId = "" }) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.icon_x),
+                        contentDescription = "Clear text",
+                        tint = Color(ContextCompat.getColor(context, R.color.assistive))
+                    )
+                }
+            }
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        CustomOutlinedTextField(
+            value = textPw,
+            onValueChange = { textPw = it },
+            placeholder = "비밀번호를 입력하세요.",
+            isPassword = true,
+            context = context,
+            trailingIcon = {
+                IconButton(onClick = { textPw = "" }) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.icon_x),
+                        contentDescription = "Clear text",
+                        tint = Color(ContextCompat.getColor(context, R.color.assistive))
+                    )
+                }
+            }
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        CustomButton(
+            text = "로그인",
+            backgroundColor = Color(ContextCompat.getColor(context, R.color.primary)),
+            textColor = Color.White,
+            padding = 24,
+            onClick = { login(textId, textPw) }
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        CustomButton(
+            text = "카카오계정으로 로그인",
+            backgroundColor = Color(ContextCompat.getColor(context, R.color.kakao)),
+            textColor = Color.Black,
+            padding = 24,
+            onClick = { /* 카카오 로그인 버튼 클릭 시 동작 */ }
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        CustomButton(
+            text = "회원가입",
+            backgroundColor = Color(ContextCompat.getColor(context, R.color.transparent)),
+            textColor = Color.Black,
+            padding = 24,
+            onClick = { navController.navigate(Routes.SignUp.route) }
+        )
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewLoginScreen() {
-//    LoginScreen(loginViewModel = LoginViewModel)
-//}

@@ -33,6 +33,9 @@ class LoginViewModel @Inject constructor(
     var userId: Int = -1
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
+    fun resetLoginState() {
+        _postLoginUserState.value = UiState.Empty
+    }
     fun postLoginUser(id: String, pw: String) {
         viewModelScope.launch {
             userRepository.postLoginUser(

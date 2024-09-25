@@ -13,5 +13,10 @@
     <color name="assistive">#FFA4A4A4</color>
     <color name="border">#227C8189</color>
     <color name="label">#FFF1F1F2</color>
+    <color name="light_blue">#FF00AEFF</color>
+    <color name="orange">#FFFF5E00</color>
+    <color name="lime">#FF58CF04</color>
+    <color name="negative">#FFFF4242</color>
+    <color name="positive">#FF00BF40</color>
 
 </resources>

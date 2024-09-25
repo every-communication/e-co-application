@@ -3,7 +3,6 @@ package com.example.graduationproject_aos.data.service
 import com.example.graduationproject_aos.data.model.request.RequestUserSignInDto
 import com.example.graduationproject_aos.data.model.request.RequestUserSignUpDto
 import com.example.graduationproject_aos.data.model.response.ResponseDto
-import com.example.graduationproject_aos.data.model.response.ResponseFriendRequest
 import com.example.graduationproject_aos.data.model.response.ResponseFriendRequestedApproveDto
 import com.example.graduationproject_aos.data.model.response.ResponseGetFriendRequest
 import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
@@ -27,8 +26,7 @@ interface AuthService {
     ): ResponseDto
 
     @GET("/friends")
-    suspend fun getAllFriends(
-    ): ResponseDto
+    suspend fun getAllFriends(): ResponseDto
 
     @POST("/friend-requested/approve")
     suspend fun postFriendRequestedApprove(
@@ -36,8 +34,7 @@ interface AuthService {
     ): ResponseFriendRequestedApproveDto
 
     @GET("/friend-request")
-    suspend fun getFriendRequest(
-    ): ResponseGetFriendRequest
+    suspend fun getFriendRequest(): ResponseGetFriendRequest
 
     @POST("/friend-request")
     suspend fun postFriendRequest(
@@ -55,6 +52,5 @@ interface AuthService {
     ): ResponsePatchFriendRequestRemove
 
     @GET("/friend-requested")
-    suspend fun getFriendRequested(
-    ): ResponseGetFriendRequest
+    suspend fun getFriendRequested(): ResponseGetFriendRequest
 }

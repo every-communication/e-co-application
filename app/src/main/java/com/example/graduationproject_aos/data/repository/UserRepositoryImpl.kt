@@ -3,6 +3,10 @@ package com.example.graduationproject_aos.data.repository
 import com.example.graduationproject_aos.data.model.request.RequestUserSignInDto
 import com.example.graduationproject_aos.data.model.request.RequestUserSignUpDto
 import com.example.graduationproject_aos.data.model.response.ResponseDto
+import com.example.graduationproject_aos.data.model.response.ResponseFriendRequestedApproveDto
+import com.example.graduationproject_aos.data.model.response.ResponseGetFriendRequest
+import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
+import com.example.graduationproject_aos.data.model.response.ResponsePostFriendRequest
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
 import com.example.graduationproject_aos.data.source.UserDataSource
 import com.example.graduationproject_aos.domain.repository.UserRepository
@@ -21,4 +25,38 @@ class UserRepositoryImpl @Inject constructor(
             userDataSource.postSignUpUser(requestUserSignUpDto)
         }
 
+    override suspend fun getAllFriends(): Result<ResponseDto> =
+        runCatching {
+            userDataSource.getAllFriends()
+        }
+
+    override suspend fun postFriendRequestedApprove(id: Int): Result<ResponseFriendRequestedApproveDto> =
+        runCatching {
+            userDataSource.postFriendRequestedApprove(id)
+        }
+
+    override suspend fun getFriendRequest(): Result<ResponseGetFriendRequest> =
+        runCatching {
+            userDataSource.getFriendRequest()
+        }
+
+    override suspend fun postFriendRequest(id: String): Result<ResponsePostFriendRequest> =
+        runCatching {
+            userDataSource.postFriendRequest(id)
+        }
+
+    override suspend fun patchFriendRequestedRemove(id: Int): Result<ResponsePatchFriendRequestRemove> =
+        runCatching {
+            userDataSource.patchFriendRequestedRemove(id)
+        }
+
+    override suspend fun patchFriendRequestRemove(id: Int): Result<ResponsePatchFriendRequestRemove> =
+        runCatching {
+            userDataSource.patchFriendRequestRemove(id)
+        }
+
+    override suspend fun getFriendRequested(): Result<ResponseGetFriendRequest> =
+        runCatching {
+            userDataSource.getFriendRequested()
+        }
 }

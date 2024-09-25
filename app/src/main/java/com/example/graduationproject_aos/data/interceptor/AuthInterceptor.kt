@@ -2,9 +2,6 @@ package com.example.graduationproject_aos.data.interceptor
 
 import android.content.Context
 import android.util.Log
-import com.example.graduationproject_aos.BuildConfig.BASE_URL
-import com.example.graduationproject_aos.data.model.response.ResponseDto
-import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
 import com.example.graduationproject_aos.data.model.response.UserResponseToken
 import com.example.graduationproject_aos.data.service.AuthService
 import com.example.graduationproject_aos.domain.repository.DataStoreRepository
@@ -15,17 +12,17 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 
 class AuthInterceptor @Inject constructor(
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     private val json: Json,
     private val dataStoreRepository: DataStoreRepository,
-    private val authService: AuthService
+    private val authService: Provider<AuthService>
 ) : Interceptor {
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
 
@@ -39,7 +36,7 @@ class AuthInterceptor @Inject constructor(
                 try {
                     Log.e("ABCD", "액세스 토큰 만료, 토큰 재발급 합니다.")
                     response.close()
-                    return runBlocking { handleTokenExpired(chain, originalRequest, headerRequest) }
+                    return runBlocking { handleTokenExpired(chain, originalRequest) }
                 } catch (t: Throwable) {
                     Log.e("ABCD", "예외발생 ${t.message}")
                     saveAccessToken("", "")
@@ -75,9 +72,8 @@ class AuthInterceptor @Inject constructor(
     private suspend fun handleTokenExpired(
         chain: Interceptor.Chain,
         originalRequest: Request,
-        headerRequest: Request
     ): Response {
-        val refreshTokenResponse = authService.postFreshToken(
+        val refreshTokenResponse = authService.get().postFreshToken(
             UserResponseToken(
                 accessToken = getAccessToken(),
                 refreshToken = getRefreshToken(),

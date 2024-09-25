@@ -20,23 +20,59 @@ class FriendViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _getAllFriendState =
+    private val _getFriendListState =
         MutableStateFlow<UiState<ResponseGetFriendList>>(UiState.Loading)
-    val getAllFriendState: StateFlow<UiState<ResponseGetFriendList>> =
-        _getAllFriendState.asStateFlow()
+    val getFriendListState: StateFlow<UiState<ResponseGetFriendList>> =
+        _getFriendListState.asStateFlow()
+
+    fun resetFriendListState() {
+        _getFriendListState.value = UiState.Empty
+    }
 
     fun getAllFriend() {
         viewModelScope.launch {
             userRepository.getAllFriends().onSuccess { response ->
-                _getAllFriendState.value = UiState.Success(response)
-                Timber.e("성공 $response")
+                _getFriendListState.value = UiState.Success(response)
+                Timber.e("전체 친구 리스트 호출 성공 $response")
             }.onFailure { t ->
-                Log.e("ABCD", "친구 리스트 호출 실패: ${t.message!!}")
+                Log.e("ABCD", "전체 친구 리스트 호출 실패: ${t.message!!}")
                 if (t is HttpException) {
                     val errorResponse = t.response()?.errorBody()?.string()
                     Timber.e("HTTP 실패: $errorResponse")
                 }
-                _getAllFriendState.value = UiState.Failure("친구 리스트 호출에 실패했습니다\n사유: ${t.message}")
+                _getFriendListState.value = UiState.Failure("친구 리스트 호출에 실패했습니다\n사유: ${t.message}")
+            }
+        }
+    }
+
+    fun getRequestedFriend() {
+        viewModelScope.launch {
+            userRepository.getFriendRequested().onSuccess { response ->
+                _getFriendListState.value = UiState.Success(response)
+                Timber.e("친구 요청한 친구 리스트 호출 성공 $response")
+            }.onFailure { t ->
+                Log.e("ABCD", "친구 요청한 친구 리스트 호출 실패: ${t.message!!}")
+                if (t is HttpException) {
+                    val errorResponse = t.response()?.errorBody()?.string()
+                    Timber.e("HTTP 실패: $errorResponse")
+                }
+                _getFriendListState.value = UiState.Failure("친구 요청한 친구 리스트 호출에 실패했습니다\n사유: ${t.message}")
+            }
+        }
+    }
+
+    fun getRequestFriend() {
+        viewModelScope.launch {
+            userRepository.getFriendRequest().onSuccess { response ->
+                _getFriendListState.value = UiState.Success(response)
+                Timber.e("친구 요청중인 친구 리스트 호출 성공 $response")
+            }.onFailure { t ->
+                Log.e("ABCD", "친구 요청중인 친구 리스트 호출 실패: ${t.message!!}")
+                if (t is HttpException) {
+                    val errorResponse = t.response()?.errorBody()?.string()
+                    Timber.e("HTTP 실패: $errorResponse")
+                }
+                _getFriendListState.value = UiState.Failure("친구 요청중인 친구 리스트 호출에 실패했습니다\n사유: ${t.message}")
             }
         }
     }

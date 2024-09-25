@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,10 +70,19 @@ fun FriendSceen(
     val context = LocalContext.current
     var getFriendList by remember { mutableStateOf<List<FriendList>>(emptyList()) }
     val lifecycleOwner = LocalLifecycleOwner
-    val uiState by friendViewModel.getAllFriendState
+    var currentPage by remember { mutableStateOf(0) }
+
+    val uiState by friendViewModel.getFriendListState
         .flowWithLifecycle(lifecycleOwner.current.lifecycle)
         .collectAsState(initial = UiState.Empty)
-    friendViewModel.getAllFriend()
+
+    LaunchedEffect(currentPage) {
+        when (currentPage) {
+            0 -> friendViewModel.getAllFriend()
+            1 -> friendViewModel.getRequestedFriend()
+            2 -> friendViewModel.getRequestFriend()
+        }
+    }
 
     fun mapper(value: ResponseGetFriendList): List<FriendList> {
         return value.data.map {
@@ -92,6 +102,7 @@ fun FriendSceen(
         is UiState.Success -> {
             val data = (uiState as UiState.Success<ResponseGetFriendList>).data
             getFriendList = mapper(data)
+            friendViewModel.resetFriendListState()
         }
     }
 
@@ -126,6 +137,7 @@ fun FriendSceen(
                             onClick = {
                                 coroutineScope.launch {
                                     pagerState.animateScrollToPage(index)
+                                    currentPage = index
                                 }
                             }
                         )
@@ -136,18 +148,10 @@ fun FriendSceen(
                         state = pagerState,
                         Modifier
                             .fillMaxSize()
-                            .padding(vertical = 18.dp)
+                            .padding(vertical = 18.dp),
+                        verticalAlignment = Alignment.Top
                     ) { page ->
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                        ) {
-                            when (page) {
-                                0 -> FriendListScreen(page, getFriendList)
-                                1 -> FriendListScreen(page, getFriendList)
-                                2 -> FriendListScreen(page, getFriendList)
-                            }
-                        }
+                        FriendListScreen(page, getFriendList)
                     }
                 }
             }

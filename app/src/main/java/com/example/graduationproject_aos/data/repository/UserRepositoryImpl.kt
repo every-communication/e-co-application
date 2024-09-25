@@ -4,7 +4,7 @@ import com.example.graduationproject_aos.data.model.request.RequestUserSignInDto
 import com.example.graduationproject_aos.data.model.request.RequestUserSignUpDto
 import com.example.graduationproject_aos.data.model.response.ResponseDto
 import com.example.graduationproject_aos.data.model.response.ResponseFriendRequestedApproveDto
-import com.example.graduationproject_aos.data.model.response.ResponseGetFriendRequest
+import com.example.graduationproject_aos.data.model.response.ResponseGetFriendList
 import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
 import com.example.graduationproject_aos.data.model.response.ResponsePostFriendRequest
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
@@ -25,7 +25,7 @@ class UserRepositoryImpl @Inject constructor(
             userDataSource.postSignUpUser(requestUserSignUpDto)
         }
 
-    override suspend fun getAllFriends(): Result<ResponseDto> =
+    override suspend fun getAllFriends(): Result<ResponseGetFriendList> =
         runCatching {
             userDataSource.getAllFriends()
         }
@@ -35,7 +35,7 @@ class UserRepositoryImpl @Inject constructor(
             userDataSource.postFriendRequestedApprove(id)
         }
 
-    override suspend fun getFriendRequest(): Result<ResponseGetFriendRequest> =
+    override suspend fun getFriendRequest(): Result<ResponseGetFriendList> =
         runCatching {
             userDataSource.getFriendRequest()
         }
@@ -55,7 +55,7 @@ class UserRepositoryImpl @Inject constructor(
             userDataSource.patchFriendRequestRemove(id)
         }
 
-    override suspend fun getFriendRequested(): Result<ResponseGetFriendRequest> =
+    override suspend fun getFriendRequested(): Result<ResponseGetFriendList> =
         runCatching {
             userDataSource.getFriendRequested()
         }

@@ -16,7 +16,7 @@ data class FriendList(
 )
 
 @Serializable
-data class ResponseGetFriendRequest(
+data class ResponseGetFriendList(
     @SerialName("status")
     val status: Int,
     @SerialName("message")

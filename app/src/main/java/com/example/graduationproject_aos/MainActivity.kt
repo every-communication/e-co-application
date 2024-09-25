@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.graduationproject_aos.screen.friend.FriendViewModel
 import com.example.graduationproject_aos.screen.login.LoginViewModel
 import com.example.graduationproject_aos.screen.signUp.SignUpViewModel
 import com.example.graduationproject_aos.ui.theme.GraduationProject_AOSTheme
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
                 var bottomBarVisible by remember { mutableStateOf(false) }
                 val loginViewModel by viewModels<LoginViewModel>()
                 val signUpViewModel by viewModels<SignUpViewModel>()
+                val friendViewModel by viewModels<FriendViewModel>()
 
                 Scaffold(
                     bottomBar = {
@@ -45,6 +47,7 @@ class MainActivity : ComponentActivity() {
                         NaviGraph(
                             loginViewModel,
                             signUpViewModel,
+                            friendViewModel,
                             navController,
                         ) { visible ->
                             bottomBarVisible = visible

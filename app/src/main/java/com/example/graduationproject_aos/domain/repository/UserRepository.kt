@@ -4,14 +4,10 @@ import com.example.graduationproject_aos.data.model.request.RequestUserSignInDto
 import com.example.graduationproject_aos.data.model.request.RequestUserSignUpDto
 import com.example.graduationproject_aos.data.model.response.ResponseDto
 import com.example.graduationproject_aos.data.model.response.ResponseFriendRequestedApproveDto
-import com.example.graduationproject_aos.data.model.response.ResponseGetFriendRequest
+import com.example.graduationproject_aos.data.model.response.ResponseGetFriendList
 import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
 import com.example.graduationproject_aos.data.model.response.ResponsePostFriendRequest
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PATCH
-import retrofit2.http.POST
 
 interface UserRepository {
 
@@ -19,11 +15,11 @@ interface UserRepository {
 
     suspend fun postSignUpUser(requestUserSignUpDto: RequestUserSignUpDto): Result<ResponseDto>
 
-    suspend fun getAllFriends(): Result<ResponseDto>
+    suspend fun getAllFriends(): Result<ResponseGetFriendList>
 
     suspend fun postFriendRequestedApprove(id: Int): Result<ResponseFriendRequestedApproveDto>
 
-    suspend fun getFriendRequest(): Result<ResponseGetFriendRequest>
+    suspend fun getFriendRequest(): Result<ResponseGetFriendList>
 
     suspend fun postFriendRequest(id: String): Result<ResponsePostFriendRequest>
 
@@ -31,6 +27,6 @@ interface UserRepository {
 
     suspend fun patchFriendRequestRemove(id: Int): Result<ResponsePatchFriendRequestRemove>
 
-    suspend fun getFriendRequested(): Result<ResponseGetFriendRequest>
+    suspend fun getFriendRequested(): Result<ResponseGetFriendList>
 
 }

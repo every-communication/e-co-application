@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.graduationproject_aos.screen.friend.FriendSceen
+import com.example.graduationproject_aos.screen.friend.FriendViewModel
 import com.example.graduationproject_aos.screen.home.HomeScreen
 import com.example.graduationproject_aos.screen.login.LoginScreen
 import com.example.graduationproject_aos.screen.login.LoginViewModel
@@ -25,6 +26,7 @@ sealed class Routes(val route: String) {
 fun NaviGraph(
     loginViewModel: LoginViewModel,
     signUpViewModel: SignUpViewModel,
+    friendViewModel: FriendViewModel,
     navController: NavHostController,
     bottomBarVisible: (Boolean) -> Unit
 ) {
@@ -73,6 +75,7 @@ fun NaviGraph(
                 FriendSceen(
                     navController = navController,
                     bottomBarVisible = bottomBarVisible,
+                    friendViewModel = friendViewModel
                 )
             }
 

@@ -2,11 +2,6 @@ package com.example.graduationproject_aos.data.source
 
 import com.example.graduationproject_aos.data.model.request.RequestUserSignInDto
 import com.example.graduationproject_aos.data.model.request.RequestUserSignUpDto
-import com.example.graduationproject_aos.data.model.response.ResponseDto
-import com.example.graduationproject_aos.data.model.response.ResponseFriendRequestedApproveDto
-import com.example.graduationproject_aos.data.model.response.ResponseGetFriendRequest
-import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
-import com.example.graduationproject_aos.data.model.response.ResponsePostFriendRequest
 import com.example.graduationproject_aos.data.service.AuthService
 import javax.inject.Inject
 

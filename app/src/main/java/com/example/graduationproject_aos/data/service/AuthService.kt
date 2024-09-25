@@ -4,10 +4,11 @@ import com.example.graduationproject_aos.data.model.request.RequestUserSignInDto
 import com.example.graduationproject_aos.data.model.request.RequestUserSignUpDto
 import com.example.graduationproject_aos.data.model.response.ResponseDto
 import com.example.graduationproject_aos.data.model.response.ResponseFriendRequestedApproveDto
-import com.example.graduationproject_aos.data.model.response.ResponseGetFriendRequest
+import com.example.graduationproject_aos.data.model.response.ResponseGetFriendList
 import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
 import com.example.graduationproject_aos.data.model.response.ResponsePostFriendRequest
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
+import com.example.graduationproject_aos.data.model.response.UserResponseToken
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -26,7 +27,7 @@ interface AuthService {
     ): ResponseDto
 
     @GET("/friends")
-    suspend fun getAllFriends(): ResponseDto
+    suspend fun getAllFriends(): ResponseGetFriendList
 
     @POST("/friend-requested/approve")
     suspend fun postFriendRequestedApprove(
@@ -34,7 +35,7 @@ interface AuthService {
     ): ResponseFriendRequestedApproveDto
 
     @GET("/friend-request")
-    suspend fun getFriendRequest(): ResponseGetFriendRequest
+    suspend fun getFriendRequest(): ResponseGetFriendList
 
     @POST("/friend-request")
     suspend fun postFriendRequest(
@@ -52,5 +53,10 @@ interface AuthService {
     ): ResponsePatchFriendRequestRemove
 
     @GET("/friend-requested")
-    suspend fun getFriendRequested(): ResponseGetFriendRequest
+    suspend fun getFriendRequested(): ResponseGetFriendList
+
+    @POST("/auth/refresh")
+    suspend fun postFreshToken(
+        @Body request: UserResponseToken
+    ): ResponseUserSignInDto
 }

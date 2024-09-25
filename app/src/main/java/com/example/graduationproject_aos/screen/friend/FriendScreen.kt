@@ -1,5 +1,6 @@
 package com.example.graduationproject_aos.screen.friend
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,16 +19,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,15 +44,22 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.graduationproject_aos.R
+import com.example.graduationproject_aos.data.model.response.FriendList
+import com.example.graduationproject_aos.data.model.response.ResponseGetFriendList
 import com.example.graduationproject_aos.util.CustomStatusBar
+import com.example.graduationproject_aos.util.UiState
 import com.example.graduationproject_aos.util.showToast
 import kotlinx.coroutines.launch
+import androidx.lifecycle.flowWithLifecycle
 
+@SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun FriendSceen(
     navController: NavHostController,
     bottomBarVisible: (Boolean) -> Unit,
+    friendViewModel: FriendViewModel
 ) {
     val tabs = listOf("내 친구 목록", "친구 요청", "친구 요청중")
     val pagerState = rememberPagerState {
@@ -56,6 +67,34 @@ fun FriendSceen(
     }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    var getFriendList by remember { mutableStateOf<List<FriendList>>(emptyList()) }
+    val lifecycleOwner = LocalLifecycleOwner
+    val uiState by friendViewModel.getAllFriendState
+        .flowWithLifecycle(lifecycleOwner.current.lifecycle)
+        .collectAsState(initial = UiState.Empty)
+    friendViewModel.getAllFriend()
+
+    fun mapper(value: ResponseGetFriendList): List<FriendList> {
+        return value.data.map {
+            FriendList(
+                userId = it.userId,
+                email = it.email,
+                nickname = it.nickname,
+                thumbnail = it.thumbnail,
+            )
+        }
+    }
+
+    when (uiState) {
+        is UiState.Empty -> Unit
+        is UiState.Failure -> Unit
+        is UiState.Loading -> Unit
+        is UiState.Success -> {
+            val data = (uiState as UiState.Success<ResponseGetFriendList>).data
+            getFriendList = mapper(data)
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -104,9 +143,9 @@ fun FriendSceen(
                                 .fillMaxSize()
                         ) {
                             when (page) {
-                                0 -> FriendListScreen(page)
-                                1 -> FriendListScreen(page)
-                                2 -> FriendListScreen(page)
+                                0 -> FriendListScreen(page, getFriendList)
+                                1 -> FriendListScreen(page, getFriendList)
+                                2 -> FriendListScreen(page, getFriendList)
                             }
                         }
                     }
@@ -117,7 +156,7 @@ fun FriendSceen(
 }
 
 @Composable
-fun FriendListScreen(page: Int) {
+fun FriendListScreen(page: Int, getFriendList: List<FriendList>) {
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -131,15 +170,15 @@ fun FriendListScreen(page: Int) {
             .clip(RoundedCornerShape(8.dp))
     ) {
         LazyColumn {
-            items(100) { index ->
-                ListItem(index)
+            items(getFriendList) { friend ->
+                ListItem(friend)
             }
         }
     }
 }
 
 @Composable
-fun ListItem(Index: Int) {
+fun ListItem(friend: FriendList) {
     val context = LocalContext.current
     Row(
         modifier = Modifier
@@ -157,14 +196,14 @@ fun ListItem(Index: Int) {
             Spacer(modifier = Modifier.width(20.dp))
             Column {
                 Text(
-                    text = "김건국",
+                    text = friend.nickname ?: "Unknown",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
                         fontSize = 14.sp
                     )
                 )
                 Text(
-                    text = "konkuk@konkuk.ac.kr",
+                    text = friend.email ?: "Unknown",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.eco_pretendard_neutral)),
                         fontSize = 14.sp

@@ -1,9 +1,12 @@
 package com.example.graduationproject_aos.data.interceptor
 
 import android.content.Context
+import android.util.Log
 import com.example.graduationproject_aos.BuildConfig.BASE_URL
 import com.example.graduationproject_aos.data.model.response.ResponseDto
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
+import com.example.graduationproject_aos.data.model.response.UserResponseToken
+import com.example.graduationproject_aos.data.service.AuthService
 import com.example.graduationproject_aos.domain.repository.DataStoreRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +23,8 @@ import javax.inject.Inject
 class AuthInterceptor @Inject constructor(
     @ApplicationContext context: Context,
     private val json: Json,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val authService: AuthService
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
@@ -33,11 +37,11 @@ class AuthInterceptor @Inject constructor(
         when (response.code) {
             CODE_TOKEN_EXPIRED -> {
                 try {
-                    Timber.e("액세스 토큰 만료, 토큰 재발급 합니다.")
+                    Log.e("ABCD", "액세스 토큰 만료, 토큰 재발급 합니다.")
                     response.close()
-                    return handleTokenExpired(chain, originalRequest, headerRequest)
+                    return runBlocking { handleTokenExpired(chain, originalRequest, headerRequest) }
                 } catch (t: Throwable) {
-                    Timber.e("예외발생 ${t.message}")
+                    Log.e("ABCD", "예외발생 ${t.message}")
                     saveAccessToken("", "")
                 }
             }
@@ -48,8 +52,12 @@ class AuthInterceptor @Inject constructor(
         }
         return response
     }
+
     private fun Request.newAuthBuilder() =
-        this.newBuilder().addHeader(HEADER_TOKEN, runBlocking(Dispatchers.IO) { getAccessToken() })
+        this.newBuilder().addHeader(
+            "Authorization",
+            "Bearer ${runBlocking(Dispatchers.IO) { getAccessToken() }}"
+        )
 
     private suspend fun getAccessToken(): String {
         return dataStoreRepository.getAccessToken().first() ?: ""
@@ -64,44 +72,31 @@ class AuthInterceptor @Inject constructor(
             dataStoreRepository.saveAccessToken(accessToken, refreshToken)
         }
 
-    private fun handleTokenExpired(
+    private suspend fun handleTokenExpired(
         chain: Interceptor.Chain,
         originalRequest: Request,
         headerRequest: Request
     ): Response {
-        val refreshTokenRequest = originalRequest.newBuilder().post("".toRequestBody())
-            .url("${BASE_URL}/auth/refresh")
-            .addHeader(REFRESH_TOKEN, runBlocking(Dispatchers.IO) { getRefreshToken() })
-            .build()
-        val refreshTokenResponse = chain.proceed(refreshTokenRequest)
-        Timber.e("리프레시 토큰 : $refreshTokenResponse")
+        val refreshTokenResponse = authService.postFreshToken(
+            UserResponseToken(
+                accessToken = getAccessToken(),
+                refreshToken = getRefreshToken(),
+            )
+        )
+        Log.d("ABCD", "리프레시 토큰 : ${refreshTokenResponse.data.refreshToken}")
 
-        if (refreshTokenResponse.isSuccessful) {
-            val responseToken = json.decodeFromString(
-                refreshTokenResponse.body?.string().toString()
-            ) as ResponseUserSignInDto
-            if (responseToken.data != null) {
-                Timber.e("리프레시 토큰 : ${responseToken.data.refreshToken}")
-                saveAccessToken(
-                    responseToken.data.accessToken,
-                    responseToken.data.refreshToken
-                )
-            }
-            refreshTokenResponse.close()
-            val newRequest = originalRequest.newAuthBuilder().build()
-            return chain.proceed(newRequest)
-        } else {
-            refreshTokenResponse.close()
-            Timber.e("리프레시 토큰 : ${refreshTokenResponse.code}")
-            saveAccessToken("", "")
-            return chain.proceed(headerRequest)
-        }
+        saveAccessToken(
+            refreshTokenResponse.data.accessToken,
+            refreshTokenResponse.data.refreshToken
+        )
+        Log.d("ABCD", "리프레시 토큰 : ${refreshTokenResponse.data.refreshToken}")
+
+        val newRequest = originalRequest.newAuthBuilder().build()
+        return chain.proceed(newRequest)
     }
 
     companion object {
-        private const val HEADER_TOKEN = "accessToken"
         private const val CODE_TOKEN_EXPIRED = 401
         private const val CODE_INVALID_USER = 404
-        private const val REFRESH_TOKEN = "refreshToken"
     }
 }

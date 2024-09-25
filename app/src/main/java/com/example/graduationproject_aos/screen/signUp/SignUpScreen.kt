@@ -1,16 +1,26 @@
 package com.example.graduationproject_aos.screen.signUp
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,24 +36,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.graduationproject_aos.R
 import com.example.graduationproject_aos.Routes
 import com.example.graduationproject_aos.util.CustomButton
 import com.example.graduationproject_aos.util.CustomOutlinedTextField
 import com.example.graduationproject_aos.util.UiState
+import com.example.graduationproject_aos.util.customBorderBox
 import com.example.graduationproject_aos.util.showToast
 
 @SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
+    bottomBarVisible: (Boolean) -> Unit,
     signUpViewModel: SignUpViewModel
 ) {
     val context = LocalContext.current
@@ -66,6 +83,7 @@ fun SignUpScreen(
         is UiState.Failure -> {
             context.showToast(message = state.msg)
         }
+
         is UiState.Loading -> Unit
         is UiState.Success -> {
             navController.navigate(Routes.Login.route) {
@@ -81,9 +99,9 @@ fun SignUpScreen(
         if (email.isEmpty()) {
             context.showToast("이메일을 입력해주세요")
             return
-        }  else if (nickname.isEmpty()) {
+        } else if (nickname.isEmpty()) {
             context.showToast("닉네임을 입력해주세요")
-        }else if (pw.isEmpty()) {
+        } else if (pw.isEmpty()) {
             context.showToast("비밀번호를 입력해주세요")
         } else if (pwCheck.isEmpty()) {
             context.showToast("확인용 비밀번호를 입력해주세요")
@@ -95,19 +113,24 @@ fun SignUpScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(Color.White),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(5.dp))
         Text(
             text = "회원가입",
-//            style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)), fontSize = 28.sp),
-            style = TextStyle(fontSize = 28.sp),
+            style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)), fontSize = 28.sp),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(35.dp))
-        Image(painter = painterResource(id = R.drawable.profile), contentDescription = null, Modifier.size(100.dp))
+        Image(
+            painter = painterResource(id = R.drawable.profile),
+            contentDescription = null,
+            Modifier.size(100.dp)
+        )
         Spacer(modifier = Modifier.height(19.dp))
         Text(
             text = "이메일 *",
@@ -211,15 +234,85 @@ fun SignUpScreen(
                 .padding(start = 24.dp)
         )
         Spacer(modifier = Modifier.height(2.dp))
+        var selectedOption by remember { mutableStateOf("left") }
+
+        val normalBorder = BorderStroke(1.dp, Color.Black)
+        val leftSelectedBorder = BorderStroke(3.dp, color = Color.Blue)
+        val otherBorders = BorderStroke(width = 1.dp, color = Color.Blue)
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 24.dp)
+        ) {
+            OutlinedButton(
+                onClick = { selectedOption = "left" },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+                    .background(Color.White)
+                    .customBorderBox(
+                        left = if (selectedOption == "left") 16.dp else 2.dp,
+                        top = 2.dp,
+                        right = 2.dp,
+                        bottom = 2.dp,
+                        color = if (selectedOption == "left") Color(ContextCompat.getColor(
+                            context, R.color.primary)) else Color.Gray
+                    )
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        "농인이에요",
+                        style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)), fontSize = 14.sp)
+                    )
+                    Text(
+                        "수어 서비스가 필요해요",
+                        style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)), fontSize = 12.sp)
+                    )
+                }
+            }
+
+            OutlinedButton(
+                onClick = { selectedOption = "right" },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+                    .background(Color.White)
+                    .customBorderBox(
+                        left = if (selectedOption == "right") 16.dp else 2.dp,
+                        top = 2.dp,
+                        right = 2.dp,
+                        bottom = 2.dp,
+                        color = if (selectedOption == "right") Color(ContextCompat.getColor(
+                            context, R.color.primary)) else Color.Gray
+                    )
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        "청인이에요",
+                        style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)), fontSize = 14.sp)
+                    )
+                    Text(
+                        "수어 해석이 필요해요",
+                        style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)), fontSize = 12.sp)
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(34.dp))
 
         CustomButton(
             text = "회원가입 하기",
             backgroundColor = Color(ContextCompat.getColor(context, R.color.primary)),
             textColor = Color.White,
             padding = 24,
-            onClick = { signUp(textEmail, textPw,textPwCheck, textNickname, selectUserType) }
+            onClick = { signUp(textEmail, textPw, textPwCheck, textNickname, selectUserType) }
         )
         Spacer(modifier = Modifier.height(12.dp))
     }
 }
-

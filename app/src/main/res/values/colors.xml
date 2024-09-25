@@ -12,5 +12,6 @@
     <color name="transparent">#00000000</color>
     <color name="assistive">#FFA4A4A4</color>
     <color name="border">#227C8189</color>
+    <color name="label">#FFF1F1F2</color>
 
 </resources>

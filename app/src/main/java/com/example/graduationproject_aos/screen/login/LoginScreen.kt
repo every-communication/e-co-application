@@ -42,7 +42,7 @@ import com.example.graduationproject_aos.util.showToast
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-//    bottomBarVisible: (Boolean) -> Unit,
+    bottomBarVisible: (Boolean) -> Unit,
     loginViewModel: LoginViewModel
 ) {
     var textId by remember { mutableStateOf("") }
@@ -63,6 +63,7 @@ fun LoginScreen(
         }
         is UiState.Loading -> Unit
         is UiState.Success -> {
+            bottomBarVisible(true)
             navController.navigate(Routes.Home.route) {
                 popUpTo(Routes.Login.route) {
                     inclusive = true

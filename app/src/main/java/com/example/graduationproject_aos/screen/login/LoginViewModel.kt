@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.graduationproject_aos.data.model.request.RequestUserSignInDto
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
+import com.example.graduationproject_aos.domain.repository.DataStoreRepository
 import com.example.graduationproject_aos.domain.repository.UserRepository
 import com.example.graduationproject_aos.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
     private val _postLoginUserState =
@@ -38,6 +41,7 @@ class LoginViewModel @Inject constructor(
                 )
             ).onSuccess { response ->
                 _postLoginUserState.value = UiState.Success(response)
+                saveAccessToken(response.data.accessToken, response.data.refreshToken)
                 Timber.e("성공 $response")
             }.onFailure { t ->
                 Log.e("ABCD", "ViewModel 로그인 실패: ${t.message!!}")
@@ -49,4 +53,14 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    private fun saveAccessToken(accessToken: String, refreshToken: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.saveAccessToken(accessToken, refreshToken)
+        }
+
+    private fun saveUserId(userId: Int) =
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.saveUserId(userId)
+        }
 }

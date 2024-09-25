@@ -1,6 +1,8 @@
 package com.example.graduationproject_aos.di
 
+import com.example.graduationproject_aos.data.repository.DataStoreRepositoryImpl
 import com.example.graduationproject_aos.data.repository.UserRepositoryImpl
+import com.example.graduationproject_aos.domain.repository.DataStoreRepository
 import com.example.graduationproject_aos.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -16,4 +18,10 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindDataStoreRepository(
+        dataStoreRepositoryImpl: DataStoreRepositoryImpl
+    ): DataStoreRepository
 }

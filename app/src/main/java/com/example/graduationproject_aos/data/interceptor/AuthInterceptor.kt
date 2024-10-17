@@ -26,8 +26,14 @@ class AuthInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
 
-        val headerRequest = originalRequest.newAuthBuilder()
-            .build()
+        val accessToken = runBlocking(Dispatchers.IO) { getAccessToken() }
+        if (accessToken.isEmpty()) {
+            Log.e("ABCD", "Access Token이 존재하지 않습니다.")
+            return chain.proceed(originalRequest) // 기본 요청으로 진행
+        }
+
+        val headerRequest = originalRequest.newAuthBuilder(accessToken).build()
+        logRequestHeaders(headerRequest)
 
         val response = chain.proceed(headerRequest)
 
@@ -44,16 +50,24 @@ class AuthInterceptor @Inject constructor(
             }
 
             CODE_INVALID_USER -> {
+                Log.e("ABCD", "잘못된 사용자 인증입니다.")
                 saveAccessToken("", "")
             }
         }
         return response
     }
 
-    private fun Request.newAuthBuilder() =
+    private fun logRequestHeaders(request: Request) {
+        Log.d("AuthInterceptor", "Request URL: ${request.url}")
+        request.headers.forEach { header ->
+            Log.d("AuthInterceptor", "Header: ${header.first} = ${header.second}")
+        }
+    }
+
+    private fun Request.newAuthBuilder(token: String) =
         this.newBuilder().addHeader(
             "Authorization",
-            "Bearer ${runBlocking(Dispatchers.IO) { getAccessToken() }}"
+            "Bearer $token"
         )
 
     private suspend fun getAccessToken(): String {
@@ -73,22 +87,27 @@ class AuthInterceptor @Inject constructor(
         chain: Interceptor.Chain,
         originalRequest: Request,
     ): Response {
-        val refreshTokenResponse = authService.get().postFreshToken(
-            UserResponseToken(
-                accessToken = getAccessToken(),
-                refreshToken = getRefreshToken(),
+        return try {
+            val refreshTokenResponse = authService.get().postFreshToken(
+                UserResponseToken(
+                    accessToken = getAccessToken(),
+                    refreshToken = getRefreshToken(),
+                )
             )
-        )
-        Log.d("ABCD", "리프레시 토큰 : ${refreshTokenResponse.data.refreshToken}")
 
-        saveAccessToken(
-            refreshTokenResponse.data.accessToken,
-            refreshTokenResponse.data.refreshToken
-        )
-        Log.d("ABCD", "리프레시 토큰 : ${refreshTokenResponse.data.refreshToken}")
+            Log.d("ABCD", "새로운 액세스 토큰 : ${refreshTokenResponse.data.accessToken}")
 
-        val newRequest = originalRequest.newAuthBuilder().build()
-        return chain.proceed(newRequest)
+            saveAccessToken(
+                refreshTokenResponse.data.accessToken,
+                refreshTokenResponse.data.refreshToken
+            )
+
+            val newRequest = originalRequest.newAuthBuilder(refreshTokenResponse.data.accessToken).build()
+            chain.proceed(newRequest)
+        } catch (e: Exception) {
+            Log.e("ABCD", "토큰 갱신 실패: ${e.message}")
+            throw e // 갱신 실패 시 예외를 다시 던짐
+        }
     }
 
     companion object {

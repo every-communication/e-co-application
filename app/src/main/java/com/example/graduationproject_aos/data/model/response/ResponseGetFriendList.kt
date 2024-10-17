@@ -12,7 +12,7 @@ data class FriendList(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("thumbnail")
-    val thumbnail: String,
+    val thumbnail: String?,
 )
 
 @Serializable

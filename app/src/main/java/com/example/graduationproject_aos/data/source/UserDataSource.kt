@@ -18,12 +18,16 @@ class UserDataSource @Inject constructor(
 
     suspend fun getFriendRequest() = authService.getFriendRequest()
 
-    suspend fun postFriendRequest(id: String) = authService.postFriendRequest(id)
+    suspend fun postFriendRequest(id: Int) = authService.postFriendRequest(id)
 
     suspend fun patchFriendRequestedRemove(id: Int) = authService.patchFriendRequestedRemove(id)
 
     suspend fun patchFriendRequestRemove(id: Int) = authService.patchFriendRequestRemove(id)
 
     suspend fun getFriendRequested() = authService.getFriendRequested()
+
+    suspend fun deleteFriend(id: Int) = authService.deleteFriend(id)
+
+    suspend fun searchFriend(userInfo: String) = authService.getSearchFriend(userInfo)
 
 }

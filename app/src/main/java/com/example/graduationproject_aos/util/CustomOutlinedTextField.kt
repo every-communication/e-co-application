@@ -32,6 +32,7 @@ fun CustomOutlinedTextField(
     isPassword: Boolean = false,
     modifier: Modifier = Modifier,
     trailingIcon: (@Composable (() -> Unit))? = null,
+    padding: Int = 24,
 ) {
     OutlinedTextField(
         value = value,
@@ -39,7 +40,7 @@ fun CustomOutlinedTextField(
         modifier = modifier
             .height(52.dp)
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = padding.dp)
             .background(Color(ContextCompat.getColor(LocalContext.current, R.color.transparent))),
         textStyle = TextStyle(fontSize = 14.sp),
         placeholder = {

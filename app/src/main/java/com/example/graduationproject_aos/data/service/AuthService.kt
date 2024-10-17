@@ -7,12 +7,17 @@ import com.example.graduationproject_aos.data.model.response.ResponseFriendReque
 import com.example.graduationproject_aos.data.model.response.ResponseGetFriendList
 import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
 import com.example.graduationproject_aos.data.model.response.ResponsePostFriendRequest
+import com.example.graduationproject_aos.data.model.response.ResponseSearchFriendList
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
 import com.example.graduationproject_aos.data.model.response.UserResponseToken
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AuthService {
 
@@ -37,9 +42,9 @@ interface AuthService {
     @GET("/friend-request")
     suspend fun getFriendRequest(): ResponseGetFriendList
 
-    @POST("/friend-request")
+    @POST("/friend-request/{friendId}")
     suspend fun postFriendRequest(
-        @Body request: String
+        @Path("friendId") friendId: Int
     ): ResponsePostFriendRequest
 
     @PATCH("/friend-requested/remove")
@@ -59,4 +64,14 @@ interface AuthService {
     suspend fun postFreshToken(
         @Body request: UserResponseToken
     ): ResponseUserSignInDto
+
+    @HTTP(method = "DELETE", path = "/friends/{friendId}", hasBody = false)
+    suspend fun deleteFriend(
+        @Path("friendId") friendId: Int,
+    ): ResponseDto
+
+    @GET("/friend-search")
+    suspend fun getSearchFriend(
+        @Query("userInfo") userInfo: String,
+    ): ResponseSearchFriendList
 }

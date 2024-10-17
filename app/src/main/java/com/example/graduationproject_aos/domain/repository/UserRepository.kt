@@ -7,6 +7,7 @@ import com.example.graduationproject_aos.data.model.response.ResponseFriendReque
 import com.example.graduationproject_aos.data.model.response.ResponseGetFriendList
 import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
 import com.example.graduationproject_aos.data.model.response.ResponsePostFriendRequest
+import com.example.graduationproject_aos.data.model.response.ResponseSearchFriendList
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
 
 interface UserRepository {
@@ -21,12 +22,16 @@ interface UserRepository {
 
     suspend fun getFriendRequest(): Result<ResponseGetFriendList>
 
-    suspend fun postFriendRequest(id: String): Result<ResponsePostFriendRequest>
+    suspend fun postFriendRequest(id: Int): Result<ResponsePostFriendRequest>
 
     suspend fun patchFriendRequestedRemove(id: Int): Result<ResponsePatchFriendRequestRemove>
 
     suspend fun patchFriendRequestRemove(id: Int): Result<ResponsePatchFriendRequestRemove>
 
     suspend fun getFriendRequested(): Result<ResponseGetFriendList>
+
+    suspend fun deleteFriend(id: Int): Result<ResponseDto>
+
+    suspend fun searchFriend(userInfo: String): Result<ResponseSearchFriendList>
 
 }

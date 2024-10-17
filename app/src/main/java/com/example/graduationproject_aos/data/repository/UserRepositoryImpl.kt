@@ -7,6 +7,7 @@ import com.example.graduationproject_aos.data.model.response.ResponseFriendReque
 import com.example.graduationproject_aos.data.model.response.ResponseGetFriendList
 import com.example.graduationproject_aos.data.model.response.ResponsePatchFriendRequestRemove
 import com.example.graduationproject_aos.data.model.response.ResponsePostFriendRequest
+import com.example.graduationproject_aos.data.model.response.ResponseSearchFriendList
 import com.example.graduationproject_aos.data.model.response.ResponseUserSignInDto
 import com.example.graduationproject_aos.data.source.UserDataSource
 import com.example.graduationproject_aos.domain.repository.UserRepository
@@ -40,7 +41,7 @@ class UserRepositoryImpl @Inject constructor(
             userDataSource.getFriendRequest()
         }
 
-    override suspend fun postFriendRequest(id: String): Result<ResponsePostFriendRequest> =
+    override suspend fun postFriendRequest(id: Int): Result<ResponsePostFriendRequest> =
         runCatching {
             userDataSource.postFriendRequest(id)
         }
@@ -58,5 +59,15 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getFriendRequested(): Result<ResponseGetFriendList> =
         runCatching {
             userDataSource.getFriendRequested()
+        }
+
+    override suspend fun deleteFriend(id: Int): Result<ResponseDto> =
+        runCatching {
+            userDataSource.deleteFriend(id)
+        }
+
+    override suspend fun searchFriend(userInfo: String): Result<ResponseSearchFriendList> =
+        runCatching {
+            userDataSource.searchFriend(userInfo)
         }
 }

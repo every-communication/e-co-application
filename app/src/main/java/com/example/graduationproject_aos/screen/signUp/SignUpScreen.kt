@@ -1,20 +1,26 @@
 package com.example.graduationproject_aos.screen.signUp
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,6 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -44,7 +53,6 @@ import com.example.graduationproject_aos.Routes
 import com.example.graduationproject_aos.util.CustomButton
 import com.example.graduationproject_aos.util.CustomOutlinedTextField
 import com.example.graduationproject_aos.util.UiState
-import com.example.graduationproject_aos.util.customBorderBox
 import com.example.graduationproject_aos.util.showToast
 
 @SuppressLint("FlowOperatorInvokedInComposition")
@@ -112,7 +120,10 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(5.dp))
         Text(
             text = "회원가입",
-            style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)), fontSize = 28.sp),
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
+                fontSize = 28.sp
+            ),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
@@ -130,7 +141,7 @@ fun SignUpScreen(
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
         )
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         CustomOutlinedTextField(
             value = textEmail,
             onValueChange = { textEmail = it },
@@ -153,7 +164,7 @@ fun SignUpScreen(
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
         )
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         CustomOutlinedTextField(
             value = textNickname,
             onValueChange = { textNickname = it },
@@ -176,7 +187,7 @@ fun SignUpScreen(
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
         )
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         CustomOutlinedTextField(
             value = textPw,
             onValueChange = { textPw = it },
@@ -200,7 +211,7 @@ fun SignUpScreen(
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
         )
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         CustomOutlinedTextField(
             value = textPwCheck,
             onValueChange = { textPwCheck = it },
@@ -224,77 +235,124 @@ fun SignUpScreen(
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
         )
-        Spacer(modifier = Modifier.height(2.dp))
-        var selectedOption by remember { mutableStateOf("left") }
-
-        val normalBorder = BorderStroke(1.dp, Color.Black)
-        val leftSelectedBorder = BorderStroke(3.dp, color = Color.Blue)
-        val otherBorders = BorderStroke(width = 1.dp, color = Color.Blue)
 
         Row(
             modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 12.dp)
         ) {
-            OutlinedButton(
-                onClick = { selectedOption = "left" },
+            Box(
                 modifier = Modifier
+                    .height(80.dp)
                     .weight(1f)
-                    .padding(8.dp)
-                    .background(Color.White)
-                    .customBorderBox(
-                        left = if (selectedOption == "left") 16.dp else 2.dp,
-                        top = 2.dp,
-                        right = 2.dp,
-                        bottom = 2.dp,
-                        color = if (selectedOption == "left") Color(ContextCompat.getColor(
-                            context, R.color.primary)) else Color.Gray
+                    .padding(horizontal = 10.dp, vertical = 10.dp)
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .border(
+                        width = 2.dp,
+                        color = if (selectUserType == "DEAF") Color(ContextCompat.getColor(context, R.color.primary)) else Color.Gray,
+                        shape = RoundedCornerShape(8.dp)
                     )
+                    .clickable { selectUserType = "DEAF" }
             ) {
+                if (selectUserType == "DEAF") {
+                    Canvas(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(16.dp)
+                    ) {
+                        drawRoundRect(
+                            color = Color(ContextCompat.getColor(context, R.color.primary)),
+                            size = Size(16.dp.toPx(), size.height),
+                            cornerRadius = CornerRadius(8.dp.toPx(), 8.dp.toPx())
+                        )
+                        drawRect(
+                            color = Color(ContextCompat.getColor(context, R.color.primary)),
+                            topLeft = Offset(8.dp.toPx(), 0f),
+                            size = Size(8.dp.toPx(), size.height)
+                        )
+                    }
+                }
+
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.Start
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, top = 15.dp),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         "농인이에요",
-                        style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)), fontSize = 14.sp)
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
+                            fontSize = 14.sp
+                        )
                     )
                     Text(
                         "수어 서비스가 필요해요",
-                        style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)), fontSize = 12.sp)
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                            fontSize = 12.sp,
+                            color = Color.Gray
+                        )
                     )
                 }
             }
 
-            OutlinedButton(
-                onClick = { selectedOption = "right" },
+            Box(
                 modifier = Modifier
+                    .height(80.dp)
                     .weight(1f)
-                    .padding(8.dp)
-                    .background(Color.White)
-                    .customBorderBox(
-                        left = if (selectedOption == "right") 16.dp else 2.dp,
-                        top = 2.dp,
-                        right = 2.dp,
-                        bottom = 2.dp,
-                        color = if (selectedOption == "right") Color(ContextCompat.getColor(
-                            context, R.color.primary)) else Color.Gray
+                    .padding(horizontal = 10.dp, vertical = 10.dp)
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .border(
+                        width = 2.dp,
+                        color = if (selectUserType == "NONDEAF") Color(ContextCompat.getColor(context, R.color.primary)) else Color.Gray,
+                        shape = RoundedCornerShape(8.dp)
                     )
+                    .clickable { selectUserType = "NONDEAF" }
             ) {
+                if (selectUserType == "NONDEAF") {
+                    Canvas(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(16.dp)
+                    ) {
+                        drawRoundRect(
+                            color = Color(ContextCompat.getColor(context, R.color.primary)),
+                            size = Size(16.dp.toPx(), size.height),
+                            cornerRadius = CornerRadius(8.dp.toPx(), 8.dp.toPx())
+                        )
+                        drawRect(
+                            color = Color(ContextCompat.getColor(context, R.color.primary)),
+                            topLeft = Offset(8.dp.toPx(), 0f),
+                            size = Size(8.dp.toPx(), size.height)
+                        )
+                    }
+                }
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.Start
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, top = 15.dp),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         "청인이에요",
-                        style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)), fontSize = 14.sp)
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
+                            fontSize = 14.sp
+                        )
                     )
                     Text(
                         "수어 해석이 필요해요",
-                        style = TextStyle(fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)), fontSize = 12.sp)
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                            fontSize = 12.sp
+                        )
                     )
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(34.dp))
 
         CustomButton(

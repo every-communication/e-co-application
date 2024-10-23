@@ -31,7 +31,6 @@ class CallActivity : AppCompatActivity(), NewMessageInterface {
     private var isMute = false
     private var isCameraPause = false
     private val rtcAudioManager by lazy { RTCAudioManager.create(this) }
-    private var isSpeakerMode = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,10 +88,6 @@ class CallActivity : AppCompatActivity(), NewMessageInterface {
                 target = targetUserNameEt.text.toString()
             }
 
-            switchCameraButton.setOnClickListener {
-                rtcClient?.switchCamera()
-            }
-
             micButton.setOnClickListener {
                 if (isMute) {
                     isMute = false
@@ -115,19 +110,6 @@ class CallActivity : AppCompatActivity(), NewMessageInterface {
                 rtcClient?.toggleCamera(isCameraPause)
             }
 
-            audioOutputButton.setOnClickListener {
-                if (isSpeakerMode) {
-                    isSpeakerMode = false
-                    audioOutputButton.setImageResource(R.drawable.ic_baseline_hearing_24)
-                    rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
-                } else {
-                    isSpeakerMode = true
-                    audioOutputButton.setImageResource(R.drawable.ic_baseline_speaker_up_24)
-                    rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
-
-                }
-
-            }
             endCallButton.setOnClickListener {
                 setCallLayoutGone()
                 setWhoToCallLayoutVisible()
@@ -242,4 +224,8 @@ class CallActivity : AppCompatActivity(), NewMessageInterface {
     private fun setWhoToCallLayoutVisible() {
         binding.whoToCallLayout.visibility = View.VISIBLE
     }
+//    override fun onPause() {
+//        super.onPause()
+//        rtcClient?.endCall() // 필요에 따라 종료
+//    }
 }

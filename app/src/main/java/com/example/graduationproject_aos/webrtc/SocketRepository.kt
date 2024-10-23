@@ -21,9 +21,8 @@ class SocketRepository(private val messageInterface: NewMessageInterface) {
         //if you are using your phone as emulator your local address is going to be "ws://192.168.0.13:3000"
         //but if your websocket is deployed you add your websocket address here
 
-//        webSocket = object : WebSocketClient(URI("ws://10.0.2.2:3000")){
         webSocket = object : WebSocketClient(URI("ws://$ipAddress:3000")){
-            //        webSocket = object : WebSocketClient(URI("ws://172.20.10.2:3000")){
+//        webSocket = object : WebSocketClient(URI("wss://api.e-co.rldnd.net/signal")){
             override fun onOpen(handshakedata: ServerHandshake?) {
                 sendMessageToSocket(
                     MessageModel(

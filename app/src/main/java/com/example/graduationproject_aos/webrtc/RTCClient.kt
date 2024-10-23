@@ -21,8 +21,6 @@ class RTCClient(
     private val iceServer = listOf(
         PeerConnection.IceServer.builder("stun:stun.l.google.com:19302")
             .createIceServer(),
-//        PeerConnection.IceServer.builder("stun:iphone-stun.strato-iphone.de:3478")
-//            .createIceServer(),
         PeerConnection.IceServer("stun:openrelay.metered.ca:80"),
         PeerConnection.IceServer(
             "turn:openrelay.metered.ca:80",
@@ -79,6 +77,7 @@ class RTCClient(
     }
 
     fun initializeSurfaceView(surface: SurfaceViewRenderer) {
+
         surface.run {
             setEnableHardwareScaler(true)
             setMirror(true)

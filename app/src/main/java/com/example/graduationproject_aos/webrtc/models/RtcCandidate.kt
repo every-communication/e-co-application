@@ -1,7 +1,7 @@
 package com.example.graduationproject_aos.webrtc.models
 
-data class MessageModel(
+data class RtcCandidate(
     val type: String,
     val room: String?=null,
-    val data: Any? = null
+    val candidate: Any?= null
 )

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- 기본 앱 스타일 -->
+    <style name="Theme.GraduationProject_AOS" parent="Theme.Material3.Light.NoActionBar">
+        <!-- 기본 폰트 설정 -->
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <!-- 기본 텍스트 스타일 -->
+    <style name="TextAppearance.AppCompat" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.Button" parent="TextAppearance.AppCompat.Widget.Button" tools:ignore="ResourceCycle">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+</resources>

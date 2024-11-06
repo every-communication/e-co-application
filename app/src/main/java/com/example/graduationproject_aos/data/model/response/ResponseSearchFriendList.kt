@@ -10,7 +10,7 @@ data class FriendSearchList(
     @SerialName("email")
     val email: String,
     @SerialName("nickname")
-    val nickname: String,
+    val nickname: String?,
     @SerialName("thumbnail")
     val thumbnail: String?,
     @SerialName("friendType")

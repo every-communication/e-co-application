@@ -2,12 +2,16 @@ package com.example.graduationproject_aos.screen.login
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,6 +28,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -78,16 +85,19 @@ fun LoginScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Image(painter = painterResource(id = R.drawable.ecologo), contentDescription = null)
         Spacer(modifier = Modifier.height(27.dp))
         Text(
-            text = "로그인",
-            color = Color.Black,
-            fontSize = 14.sp,
+            text = "이메일",
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                fontSize = 14.sp
+            ),
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
@@ -107,6 +117,17 @@ fun LoginScreen(
                 }
             }
         )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "비밀번호",
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                fontSize = 14.sp
+            ),
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(start = 24.dp)
+        )
         Spacer(modifier = Modifier.height(12.dp))
         CustomOutlinedTextField(
             value = textPw,
@@ -123,7 +144,7 @@ fun LoginScreen(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         CustomButton(
             text = "로그인",
             backgroundColor = Color(ContextCompat.getColor(context, R.color.primary)),
@@ -131,20 +152,19 @@ fun LoginScreen(
             padding = 24,
             onClick = { login(textId, textPw) }
         )
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(22.dp))
+        Row(
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Image(painter = painterResource(id = R.drawable.kakao), contentDescription = null, Modifier.size(60.dp))
+            Spacer(modifier = Modifier.width(15.dp))
+            Image(painter = painterResource(id = R.drawable.google), contentDescription = null, Modifier.size(60.dp))
+        }
         CustomButton(
-            text = "카카오계정으로 로그인",
-            backgroundColor = Color(ContextCompat.getColor(context, R.color.kakao)),
-            textColor = Color.Black,
-            padding = 24,
-            onClick = { /* 카카오 로그인 버튼 클릭 시 동작 */ }
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        CustomButton(
-            text = "회원가입",
+            text = "회원가입 하기",
             backgroundColor = Color(ContextCompat.getColor(context, R.color.transparent)),
-            textColor = Color.Black,
-            padding = 24,
+            textColor = Color(ContextCompat.getColor(context, R.color.assistive)),
+            padding = 25,
             onClick = { navController.navigate(Routes.SignUp.route) }
         )
     }

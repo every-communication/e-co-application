@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -110,14 +112,16 @@ fun SignUpScreen(
             signUpViewModel.postSignUpUser(email, pw, nickname, userType)
         }
     }
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         Text(
             text = "회원가입",
             style = TextStyle(
@@ -136,7 +140,10 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(19.dp))
         Text(
             text = "이메일 *",
-            style = TextStyle(fontSize = 14.sp),
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                fontSize = 14.sp
+            ),
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
@@ -156,10 +163,13 @@ fun SignUpScreen(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(34.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "닉네임 *",
-            style = TextStyle(fontSize = 14.sp),
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                fontSize = 14.sp
+            ),
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
@@ -179,10 +189,13 @@ fun SignUpScreen(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(34.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "비밀번호 *",
-            style = TextStyle(fontSize = 14.sp),
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                fontSize = 14.sp
+            ),
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
@@ -203,10 +216,13 @@ fun SignUpScreen(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(34.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "비밀번호 확인 *",
-            style = TextStyle(fontSize = 14.sp),
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                fontSize = 14.sp
+            ),
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
@@ -227,10 +243,13 @@ fun SignUpScreen(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(34.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "농인 / 청인 *",
-            style = TextStyle(fontSize = 14.sp),
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                fontSize = 14.sp
+            ),
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 24.dp)
@@ -242,12 +261,12 @@ fun SignUpScreen(
         ) {
             Box(
                 modifier = Modifier
-                    .height(80.dp)
+                    .height(95.dp)
                     .weight(1f)
                     .padding(horizontal = 10.dp, vertical = 10.dp)
                     .background(Color.White, shape = RoundedCornerShape(8.dp))
                     .border(
-                        width = 2.dp,
+                        width = 1.dp,
                         color = if (selectUserType == "DEAF") Color(ContextCompat.getColor(context, R.color.primary)) else Color.Gray,
                         shape = RoundedCornerShape(8.dp)
                     )
@@ -275,7 +294,8 @@ fun SignUpScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 24.dp, top = 15.dp),
+                        .fillMaxHeight()
+                        .padding(start = 24.dp),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -299,12 +319,12 @@ fun SignUpScreen(
 
             Box(
                 modifier = Modifier
-                    .height(80.dp)
+                    .height(95.dp)
                     .weight(1f)
                     .padding(horizontal = 10.dp, vertical = 10.dp)
                     .background(Color.White, shape = RoundedCornerShape(8.dp))
                     .border(
-                        width = 2.dp,
+                        width = 1.dp,
                         color = if (selectUserType == "NONDEAF") Color(ContextCompat.getColor(context, R.color.primary)) else Color.Gray,
                         shape = RoundedCornerShape(8.dp)
                     )
@@ -331,7 +351,8 @@ fun SignUpScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 24.dp, top = 15.dp),
+                        .fillMaxHeight()
+                        .padding(start = 24.dp),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -353,7 +374,7 @@ fun SignUpScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(34.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         CustomButton(
             text = "회원가입 하기",

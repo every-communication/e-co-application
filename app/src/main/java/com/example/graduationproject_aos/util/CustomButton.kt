@@ -9,9 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import com.example.graduationproject_aos.R
 
 @Composable
 fun CustomButton(
@@ -21,10 +26,14 @@ fun CustomButton(
     padding: Int,
     onClick: () -> Unit
 ) {
+    val context = LocalContext.current
     Text(
         text = text,
-        color = textColor,
-        style = TextStyle(fontSize = 16.sp),
+        style = TextStyle(
+            fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+            fontSize = 16.sp,
+            color = textColor
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = padding.dp)

@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -34,6 +36,7 @@ fun CustomOutlinedTextField(
     trailingIcon: (@Composable (() -> Unit))? = null,
     padding: Int = 24,
 ) {
+    val context = LocalContext.current
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
@@ -46,8 +49,11 @@ fun CustomOutlinedTextField(
         placeholder = {
             Text(
                 text = placeholder,
-                color = Color(ContextCompat.getColor(LocalContext.current, R.color.assistive)),
-                fontSize = 14.sp
+                style = TextStyle(
+                    fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                    fontSize = 14.sp,
+                    color = Color(ContextCompat.getColor(context, R.color.assistive))
+                ),
             )
         },
         singleLine = true,

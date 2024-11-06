@@ -2,6 +2,7 @@ package com.example.graduationproject_aos.screen.friend
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -150,22 +152,25 @@ fun FriendSceen(
 
     Column(
         modifier = Modifier.fillMaxSize()
+            .background(Color.White)
     ) {
         CustomStatusBar()
+        Spacer(modifier = Modifier.height(20.dp))
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f)
+                .background(Color.White)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 18.dp, end = 18.dp, top = 18.dp),
+                    .background(Color.White),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TabRow(
+                    modifier = Modifier.padding(horizontal = 18.dp),
                     selectedTabIndex = pagerState.currentPage,
-                    indicator = {},
                     divider = {
                         Divider(
                             color = Color(
@@ -174,6 +179,14 @@ fun FriendSceen(
                                     R.color.border
                                 )
                             )
+                        )
+                    },
+                    indicator = { tabPositions ->
+                        Box(
+                            modifier = Modifier
+                                .tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                                .height(2.dp)
+                                .background(Color(ContextCompat.getColor(context, R.color.primary)))
                         )
                     },
                     containerColor = Color.White,
@@ -189,7 +202,12 @@ fun FriendSceen(
                                             context,
                                             R.color.primary
                                         )
-                                    ) else Color.Black
+                                    ) else Color.Black,
+                                    style = TextStyle(
+                                        fontFamily = FontFamily(Font(R.font.eco_pretendard_normal)),
+                                        fontSize = 14.sp,
+                                        color = Color(ContextCompat.getColor(context, R.color.black))
+                                    ),
                                 )
                             },
                             selected = pagerState.currentPage == index,
@@ -205,16 +223,15 @@ fun FriendSceen(
                         )
                     }
                 }
-                Box(modifier = Modifier.fillMaxSize()) {
-                    HorizontalPager(
-                        state = pagerState,
-                        Modifier
-                            .fillMaxSize()
-                            .padding(vertical = 18.dp),
-                        verticalAlignment = Alignment.Top
-                    ) { page ->
-                        FriendListScreen(page, getFriendList, friendViewModel, getSearchFriendList)
-                    }
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxSize(),
+//                        .padding(vertical = 18.dp),
+                    verticalAlignment = Alignment.Top,
+                    userScrollEnabled = false
+                ) { page ->
+                FriendListScreen(page, getFriendList, friendViewModel, getSearchFriendList)
                 }
             }
         }
@@ -237,16 +254,19 @@ fun FriendListScreen(
                     showDialog = true
                     friendViewModel.getSearchFriend("")
                 },
-                containerColor = Color.Transparent, // 배경 투명
-                elevation = FloatingActionButtonDefaults.elevation(0.dp)
+                containerColor = Color(ContextCompat.getColor(context, R.color.primary)), // 배경 투명
+                elevation = FloatingActionButtonDefaults.elevation(0.dp),
+                modifier = Modifier
+                    .size(70.dp)
+                    .clip(CircleShape)
+
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.button),
+                    painter = painterResource(id = R.drawable.plus),
                     contentDescription = null,
-                    tint = Color.Unspecified,
+                    tint = Color.White,
                     modifier = Modifier
-                        .size(60.dp) // 원하는 크기 설정
-                        .clip(CircleShape)
+                        .size(25.dp)
                 )
             }
         }
@@ -254,16 +274,16 @@ fun FriendListScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(18.dp)
                 .border(
                     1.dp,
                     Color(ContextCompat.getColor(context, R.color.border)),
                     shape = RoundedCornerShape(8.dp)
                 )
-                .padding(10.dp)
                 .clip(RoundedCornerShape(8.dp))
         ) {
             LazyColumn(
-                contentPadding = paddingValues // Scaffold의 패딩을 적용
+                contentPadding = paddingValues
             ) {
                 items(getFriendList) { friend ->
                     ListItem(page, friend, friendViewModel)
@@ -328,7 +348,7 @@ fun ListItem(page: Int, friend: FriendList, friendViewModel: FriendViewModel) {
                     text = "친구 끊기",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(ContextCompat.getColor(context, R.color.negative))
                     ),
                     modifier = Modifier
@@ -348,7 +368,7 @@ fun ListItem(page: Int, friend: FriendList, friendViewModel: FriendViewModel) {
                         text = "수락",
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             color = Color(ContextCompat.getColor(context, R.color.positive))
                         ),
                         modifier = Modifier.clickable {
@@ -360,7 +380,7 @@ fun ListItem(page: Int, friend: FriendList, friendViewModel: FriendViewModel) {
                         text = "거절",
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             color = Color(ContextCompat.getColor(context, R.color.negative))
                         ),
                         modifier = Modifier.clickable {
@@ -375,7 +395,7 @@ fun ListItem(page: Int, friend: FriendList, friendViewModel: FriendViewModel) {
                     text = "요청 취소",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(ContextCompat.getColor(context, R.color.orange))
                     ),
                     modifier = Modifier
@@ -431,7 +451,7 @@ fun FriendSearchDialog(
                 LazyColumn(modifier = Modifier.fillMaxHeight()) {
                     val filteredList = if (searchQuery.isNotEmpty()) {
                         allFriendList.filter {
-                            it.nickname.contains(searchQuery, ignoreCase = true)
+                            it.nickname?.contains(searchQuery, ignoreCase = true) == true
                         }
                     } else {
                         allFriendList
@@ -502,13 +522,13 @@ fun FriendListItem(friend: FriendSearchList, friendViewModel: FriendViewModel) {
                     text = "친구 요청",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(ContextCompat.getColor(context, R.color.primary))
                     ),
                     modifier = Modifier
                         .width(60.dp)
                         .clickable {
-                        friendViewModel.postFriendRequest(friend.userId)
+                            friendViewModel.postFriendRequest(friend.userId)
                         },
                 )
             }
@@ -518,7 +538,7 @@ fun FriendListItem(friend: FriendSearchList, friendViewModel: FriendViewModel) {
                     text = "친구 삭제",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(ContextCompat.getColor(context, R.color.negative))
                     ),
                     modifier = Modifier
@@ -537,7 +557,7 @@ fun FriendListItem(friend: FriendSearchList, friendViewModel: FriendViewModel) {
                         text = "수락",
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             color = Color(ContextCompat.getColor(context, R.color.positive))
                         ),
                         modifier = Modifier.clickable {
@@ -549,7 +569,7 @@ fun FriendListItem(friend: FriendSearchList, friendViewModel: FriendViewModel) {
                         text = "거절",
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             color = Color(ContextCompat.getColor(context, R.color.negative))
                         ),
                         modifier = Modifier.clickable {
@@ -564,7 +584,7 @@ fun FriendListItem(friend: FriendSearchList, friendViewModel: FriendViewModel) {
                     text = "요청 취소",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.eco_pretendard_bold)),
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(ContextCompat.getColor(context, R.color.orange))
                     ),
                     modifier = Modifier

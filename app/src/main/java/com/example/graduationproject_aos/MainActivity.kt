@@ -15,7 +15,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.graduationproject_aos.screen.friend.FriendViewModel
+import com.example.graduationproject_aos.screen.home.HomeViewModel
 import com.example.graduationproject_aos.screen.login.LoginViewModel
+import com.example.graduationproject_aos.screen.mypage.MyPageViewModel
 import com.example.graduationproject_aos.screen.signUp.SignUpViewModel
 import com.example.graduationproject_aos.ui.theme.GraduationProject_AOSTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +33,8 @@ class MainActivity : ComponentActivity() {
                 val loginViewModel by viewModels<LoginViewModel>()
                 val signUpViewModel by viewModels<SignUpViewModel>()
                 val friendViewModel by viewModels<FriendViewModel>()
+                val homeViewModel by viewModels<HomeViewModel>()
+                val myPageViewModel by viewModels<MyPageViewModel>()
 
                 Scaffold(
                     bottomBar = {
@@ -48,6 +52,8 @@ class MainActivity : ComponentActivity() {
                             loginViewModel,
                             signUpViewModel,
                             friendViewModel,
+                            homeViewModel,
+                            myPageViewModel,
                             navController,
                         ) { visible ->
                             bottomBarVisible = visible

@@ -8,9 +8,11 @@ import androidx.navigation.compose.composable
 import com.example.graduationproject_aos.screen.friend.FriendSceen
 import com.example.graduationproject_aos.screen.friend.FriendViewModel
 import com.example.graduationproject_aos.screen.home.HomeScreen
+import com.example.graduationproject_aos.screen.home.HomeViewModel
 import com.example.graduationproject_aos.screen.login.LoginScreen
 import com.example.graduationproject_aos.screen.login.LoginViewModel
 import com.example.graduationproject_aos.screen.mypage.MyPageScreen
+import com.example.graduationproject_aos.screen.mypage.MyPageViewModel
 import com.example.graduationproject_aos.screen.signUp.SignUpScreen
 import com.example.graduationproject_aos.screen.signUp.SignUpViewModel
 
@@ -27,6 +29,8 @@ fun NaviGraph(
     loginViewModel: LoginViewModel,
     signUpViewModel: SignUpViewModel,
     friendViewModel: FriendViewModel,
+    homeViewModel: HomeViewModel,
+    myPageViewModel: MyPageViewModel,
     navController: NavHostController,
     bottomBarVisible: (Boolean) -> Unit
 ) {
@@ -54,6 +58,7 @@ fun NaviGraph(
                 HomeScreen(
                     navController = navController,
                     bottomBarVisible = bottomBarVisible,
+                    homeViewModel = homeViewModel,
                 )
             }
 
@@ -86,6 +91,7 @@ fun NaviGraph(
                 MyPageScreen(
                     navController = navController,
                     bottomBarVisible = bottomBarVisible,
+                    myPageViewModel = myPageViewModel,
                 )
             }
         }
